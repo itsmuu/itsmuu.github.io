@@ -239,6 +239,53 @@
             stroke-linejoin: round;
         }
 
+        /* --- TOMBOL HAMBURGER INTERAKTIF (GARIS 3 KE SILANG X) --- */
+        .hamburger-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border-line);
+            color: var(--text-main);
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            padding: 10px;
+            transition: border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .hamburger-toggle:hover {
+            border-color: var(--brand-color);
+            color: var(--brand-color);
+        }
+
+        /* Garis-garis hamburger */
+        .hamburger-line {
+            width: 20px;
+            height: 2px;
+            background-color: currentColor;
+            border-radius: 2px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+            transform-origin: center;
+        }
+
+        /* Transisi saat tombol aktif (Menjadi X) */
+        .hamburger-toggle.active .line-top {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-toggle.active .line-middle {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger-toggle.active .line-bottom {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
         /* --- HERO APPS SECTION --- */
         #apps-hero {
             padding: 60px 0;
@@ -455,23 +502,57 @@
             transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
-        /* --- RESPONSIVE DESIGN --- */
+        /* --- RESPONSIVE DESIGN (MOBILE & TABLET) --- */
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
+            .hamburger-toggle {
+                display: flex;
             }
-            .nav-links {
-                justify-content: center;
+
+            .nav-right {
                 gap: 12px;
-                flex-wrap: wrap;
             }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--header-bg);
+                border-bottom: 1px solid var(--border-line);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 16px 7.5%;
+                gap: 12px;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                
+                /* Efek Animasi Slide Down */
+                display: none;
+                opacity: 0;
+                transform: translateY(-10px);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
+
+            .nav-links.mobile-open {
+                display: flex;
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
             .nav-links a {
-                font-size: 14px;
+                width: 100%;
+                justify-content: space-between;
+                padding: 10px 0;
             }
+
             #apps-hero {
                 padding: 40px 0;
             }
+
+            /* Dropdown Mobile */
             .dropdown-menu {
                 position: static;
                 opacity: 1;
@@ -479,11 +560,17 @@
                 transform: none;
                 box-shadow: none;
                 border: none;
-                padding-left: 12px;
+                padding-left: 16px;
                 display: none;
+                background-color: transparent;
             }
-            .has-dropdown:hover .dropdown-menu {
+
+            .has-dropdown.open .dropdown-menu {
                 display: block;
+            }
+
+            .has-dropdown.open .dropdown-icon {
+                transform: rotate(180deg);
             }
         }
     </style>
@@ -504,11 +591,11 @@
 
             <div class="nav-right">
                 <!-- NAV MENU -->
-                <ul class="nav-links">
+                <ul class="nav-links" id="nav-menu">
                     <li><a href="https://itsmuu.github.io/" class="active">Home</a></li>
                     <li><a href="./perkembanganfisik/">Perkembangan Fisik</a></li>
-                    <li class="has-dropdown">
-                        <a href="#">
+                    <li class="has-dropdown" id="dropdown-parent">
+                        <a href="#" id="dropdown-btn">
                             Absensi 
                             <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -541,6 +628,13 @@
                         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
+                </button>
+
+                <!-- Tombol Hamburger Mobile (Dengan Animasi Menyilang X) -->
+                <button class="hamburger-toggle" id="hamburger-toggle" title="Buka Menu" aria-label="Toggle Navigation">
+                    <span class="hamburger-line line-top"></span>
+                    <span class="hamburger-line line-middle"></span>
+                    <span class="hamburger-line line-bottom"></span>
                 </button>
             </div>
         </div>
@@ -633,7 +727,6 @@
         const moonIcon = document.getElementById('moon-icon');
         const sunIcon = document.getElementById('sun-icon');
         
-        // Cek preferensi tema tersimpan di localStorage
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             document.documentElement.setAttribute('data-theme', savedTheme);
@@ -660,12 +753,33 @@
             localStorage.setItem('theme', newTheme);
         });
 
-        // --- 2. MODAL LAPORAN ABSENSI ---
+        // --- 2. NAVBAR HAMBURGER MENU (RESPONSIVE HP & ANIMASI SILANG) ---
+        const hamburgerBtn = document.getElementById('hamburger-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const dropdownParent = document.getElementById('dropdown-parent');
+        const dropdownBtn = document.getElementById('dropdown-btn');
+
+        hamburgerBtn.addEventListener('click', () => {
+            // Toggle class active pada tombol agar animasi X berjalan
+            hamburgerBtn.classList.toggle('active');
+            // Toggle tampilan menu navigasi
+            navMenu.classList.toggle('mobile-open');
+        });
+
+        // Toggle dropdown saat di klik pada tampilan mobile
+        dropdownBtn.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                dropdownParent.classList.toggle('open');
+            }
+        });
+
+        // --- 3. MODAL LAPORAN ABSENSI ---
         const modalLaporan = document.getElementById('modal-laporan');
         const inputSandi = document.getElementById('sandi-laporan');
 
         function bukaModalLaporan(event) {
-            if(event) event.preventDefault(); // Mencegah lompatan anchor '#'
+            if(event) event.preventDefault();
             modalLaporan.classList.add('active');
             inputSandi.value = '';
             setTimeout(() => inputSandi.focus(), 100);
@@ -675,7 +789,6 @@
             modalLaporan.classList.remove('active');
         }
 
-        // Batal / Tutup modal saat klik area luar modal
         modalLaporan.addEventListener('click', (e) => {
             if (e.target === modalLaporan) {
                 tutupModalLaporan();
@@ -684,10 +797,9 @@
 
         function prosesMasukLaporan() {
             const sandi = inputSandi.value;
-            if (sandi === 'admin123') { // Sesuaikan kata sandi di sini
+            if (sandi === 'admin123') {
                 tutupModalLaporan();
-                // Buka link Spreadsheet/Laporan di tab baru:
-                    window.open('https://docs.google.com/spreadsheets/', '_blank');
+                window.open('https://docs.google.com/spreadsheets/', '_blank');
             } else if (sandi.trim() === '') {
                 alert('Silakan masukkan kata sandi terlebih dahulu.');
             } else {
