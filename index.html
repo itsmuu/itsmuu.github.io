@@ -21,6 +21,8 @@
             --brand-color: #0284c7;
             --nav-link: #475569;
             --border-line: #e2e8f0;
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #f1f5f9;
         }
 
         /* --- SKEMA TEMA GELAP --- */
@@ -39,6 +41,8 @@
             --brand-color: #38bdf8;
             --nav-link: #cbd5e1;
             --border-line: #334155;
+            --dropdown-bg: #1e293b;
+            --dropdown-hover: #334155;
         }
 
         /* --- RESET & FONTS --- */
@@ -122,7 +126,11 @@
             list-style: none;
             display: flex;
             gap: 18px;
-            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
         }
 
         .nav-links a {
@@ -131,10 +139,68 @@
             font-weight: 600;
             font-size: 15px;
             transition: color 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 0;
         }
 
         .nav-links a:hover,
         .nav-links a.active {
+            color: var(--brand-color);
+        }
+
+        /* --- DROPDOWN MENU --- */
+        .dropdown-icon {
+            width: 14px;
+            height: 14px;
+            stroke-width: 2.5;
+            transition: transform 0.25s ease;
+        }
+
+        .has-dropdown:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--dropdown-bg);
+            min-width: 170px;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            padding: 8px 0;
+            list-style: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 200;
+        }
+
+        .has-dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            width: 100%;
+        }
+
+        .dropdown-menu a {
+            padding: 8px 16px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-main);
+            display: block;
+            border-radius: 0;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--dropdown-hover);
             color: var(--brand-color);
         }
 
@@ -290,12 +356,26 @@
             .nav-links {
                 justify-content: center;
                 gap: 12px;
+                flex-wrap: wrap;
             }
             .nav-links a {
                 font-size: 14px;
             }
             #apps-hero {
                 padding: 40px 0;
+            }
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                border: none;
+                padding-left: 12px;
+                display: none;
+            }
+            .has-dropdown:hover .dropdown-menu {
+                display: block;
             }
         }
     </style>
@@ -305,7 +385,7 @@
     <header>
         <div class="container navbar">
             <!-- LOGO ICON PORTAL -->
-            <a href="#" class="logo-icon" title="Home">
+            <a href="https://itsmuu.github.io/" class="logo-icon" title="Home">
                 <svg viewBox="0 0 24 24">
                     <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
                     <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
@@ -315,11 +395,22 @@
             </a>
 
             <div class="nav-right">
-                <!-- NAV MENU BARU -->
+                <!-- NAV MENU SESUAI TARGET -->
                 <ul class="nav-links">
-                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="https://itsmuu.github.io/" class="active">Home</a></li>
                     <li><a href="./perkembanganfisik/">Perkembangan Fisik</a></li>
-                    <li><a href="./absensi/">Absensi</a></li>
+                    <li class="has-dropdown">
+                        <a href="#">
+                            Absensi 
+                            <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Input Absensi</a></li>
+                            <li><a href="#">Laporan Absensi</a></li>
+                        </ul>
+                    </li>
                     <li><a href="./datarombel/">Data Rombel</a></li>
                     <li><a href="./ketuntasan/">Ketuntasan</a></li>
                 </ul>
