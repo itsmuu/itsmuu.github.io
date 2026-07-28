@@ -686,8 +686,8 @@
             const sandi = inputSandi.value;
             if (sandi === 'admin123') { // Sesuaikan kata sandi di sini
                 tutupModalLaporan();
-                // Arahkan ke link Spreadsheet/Laporan tujuan Anda
-                window.location.href = 'https://docs.google.com/spreadsheets/'; 
+                // Buka link Spreadsheet/Laporan di tab baru:
+                    window.open('https://docs.google.com/spreadsheets/', '_blank');
             } else if (sandi.trim() === '') {
                 alert('Silakan masukkan kata sandi terlebih dahulu.');
             } else {
