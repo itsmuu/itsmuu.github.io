@@ -95,6 +95,7 @@
             border-radius: 12px;
             color: var(--brand-color);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.4s ease, border-color 0.4s ease;
+            flex-shrink: 0;
         }
 
         .logo-icon:hover {
@@ -120,16 +121,20 @@
         .nav-links {
             list-style: none;
             display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
         }
 
         .nav-links a {
             color: var(--nav-link);
             text-decoration: none;
             font-weight: 600;
+            font-size: 15px;
             transition: color 0.25s ease;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--brand-color);
         }
 
@@ -145,6 +150,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -281,6 +287,13 @@
                 flex-direction: column;
                 gap: 15px;
             }
+            .nav-links {
+                justify-content: center;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 14px;
+            }
             #apps-hero {
                 padding: 40px 0;
             }
@@ -291,8 +304,8 @@
 
     <header>
         <div class="container navbar">
-            <!-- LOGO DIGANTI DENGAN ICON PORTAL / GRID LAYANAN -->
-            <a href="#" class="logo-icon" title="Portal Layanan">
+            <!-- LOGO ICON PORTAL -->
+            <a href="#" class="logo-icon" title="Home">
                 <svg viewBox="0 0 24 24">
                     <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
                     <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
@@ -302,9 +315,13 @@
             </a>
 
             <div class="nav-right">
+                <!-- NAV MENU BARU -->
                 <ul class="nav-links">
-                    <!-- TEKS DIGANTI MENJADI "Layanan" -->
-                    <li><a href="#apps-hero">Layanan</a></li>
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="./perkembanganfisik/">Perkembangan Fisik</a></li>
+                    <li><a href="./absensi/">Absensi</a></li>
+                    <li><a href="./datarombel/">Data Rombel</a></li>
+                    <li><a href="./ketuntasan/">Ketuntasan</a></li>
                 </ul>
                 
                 <!-- Tombol Sakelar Tema -->
