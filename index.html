@@ -516,7 +516,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="https://itsmuu.github.io/absensi/">Input Absensi</a></li>
-                            <li><a href="#" onclick="bukaModalLaporan()">Laporan Absensi</a></li>
+                            <li><a href="#" onclick="bukaModalLaporan(event)">Laporan Absensi</a></li>
                         </ul>
                     </li>
                     <li><a href="./datarombel/">Data Rombel</a></li>
@@ -628,11 +628,12 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        // Switch Tema Gelap/Terang
+        // --- 1. SAKELAR TEMA GELAP / TERANG ---
         const toggleBtn = document.getElementById('theme-toggle');
         const moonIcon = document.getElementById('moon-icon');
         const sunIcon = document.getElementById('sun-icon');
         
+        // Cek preferensi tema tersimpan di localStorage
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             document.documentElement.setAttribute('data-theme', savedTheme);
@@ -659,11 +660,12 @@
             localStorage.setItem('theme', newTheme);
         });
 
-        // Modal Laporan Absensi
+        // --- 2. MODAL LAPORAN ABSENSI ---
         const modalLaporan = document.getElementById('modal-laporan');
         const inputSandi = document.getElementById('sandi-laporan');
 
-        function bukaModalLaporan() {
+        function bukaModalLaporan(event) {
+            if(event) event.preventDefault(); // Mencegah lompatan anchor '#'
             modalLaporan.classList.add('active');
             inputSandi.value = '';
             setTimeout(() => inputSandi.focus(), 100);
@@ -673,13 +675,23 @@
             modalLaporan.classList.remove('active');
         }
 
+        // Batal / Tutup modal saat klik area luar modal
+        modalLaporan.addEventListener('click', (e) => {
+            if (e.target === modalLaporan) {
+                tutupModalLaporan();
+            }
+        });
+
         function prosesMasukLaporan() {
             const sandi = inputSandi.value;
-            if (sandi) {
-                // Di sini Anda bisa mengarahkan ke link spreadsheet/halaman laporan atau memvalidasi sandi
+            if (sandi === 'admin123') { // Sesuaikan kata sandi di sini
                 tutupModalLaporan();
-            } else {
+                // Arahkan ke link Spreadsheet/Laporan tujuan Anda
+                window.location.href = 'https://docs.google.com/spreadsheets/'; 
+            } else if (sandi.trim() === '') {
                 alert('Silakan masukkan kata sandi terlebih dahulu.');
+            } else {
+                alert('Kata sandi salah!');
             }
         }
 
